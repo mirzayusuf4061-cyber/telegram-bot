@@ -2,7 +2,7 @@ import math
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-TOKEN = 8173974361:AAGEDZRUGhh_wBphS3Nq_F-ushRA7xj8d10
+TOKEN = "8173974361:AAGEDZRUGhh_wBphS3Nq_F-ushRA7xj8d10"
 
 difficulties = [
     -1.5,-1.2,-1,-0.8,-0.5,-0.3,-0.2,0,0.1,0.2,
