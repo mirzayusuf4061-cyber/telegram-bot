@@ -1,2 +1,1 @@
-pyTelegramBotAPI
-openpyxl
+worker: python main.py
