@@ -1,4 +1,4 @@
-from telegram import Update
+from telebot import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import json
 import os
