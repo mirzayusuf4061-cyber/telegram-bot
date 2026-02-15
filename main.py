@@ -59,7 +59,10 @@ def save_raw_result(user_id, letters, written):
     for i in range(35):
         user_vector.append(1 if letters[i].upper() == correct_letters[i].upper() else 0)
     for i in range(5):
-        user_vector.append(1 if written[i].upper() == correct_written[i].upper() else 0)
+        if i < len(written):
+            user_vector.append(1 if written[i].upper() == correct_written[i].upper() else 0)
+        else:
+            user_vector.append(0)
 
     all_results[user_id] = user_vector
 
@@ -76,8 +79,8 @@ def check_exam(message):
     full_text = parts[2]
 
     letters_part = full_text[:35]
-    written_part = full_text[35:].strip()
-    written_answers = [x.strip().upper() for x in written_part.split(",")]
+    written_part = full_text[35:].strip() or ""
+    written_answers = [x.strip().upper() for x in written_part.split(",") if x.strip()]
 
     correct_letters = answer_keys[exam_id]["letters"]
     correct_written = answer_keys[exam_id]["written"]
@@ -85,10 +88,10 @@ def check_exam(message):
     # Faqat to'g'ri javoblar
     correct_list = []
     for i in range(35):
-        if letters_part[i].upper() == correct_letters[i].upper():
+        if i < len(letters_part) and letters_part[i].upper() == correct_letters[i].upper():
             correct_list.append(str(i+1))
-    for i in range(5):
-        if written_answers[i].upper() == correct_written[i].upper():
+    for i in range(len(correct_written)):
+        if i < len(written_answers) and written_answers[i].upper() == correct_written[i].upper():
             correct_list.append(str(35+i+1))
 
     result_text = "To‘g‘ri javoblar: " + ", ".join(correct_list)
@@ -119,3 +122,4 @@ def calculate_rasch(message):
 # =========================
 # Botni ishga tushirish
 bot.polling()
+    
