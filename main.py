@@ -10,7 +10,7 @@ bot = telebot.TeleBot(TOKEN)
 
 # =========================
 # Admin Telegram ID
-ADMIN_ID = 123456789  # O'zingizning telegram ID bilan almashtiring
+ADMIN_ID = 123456789  # O'zingizning Telegram ID bilan almashtiring
 
 # =========================
 # Javob kaliti
@@ -57,7 +57,10 @@ def save_raw_result(user_id, letters, written):
     user_vector = []
 
     for i in range(35):
-        user_vector.append(1 if letters[i].upper() == correct_letters[i].upper() else 0)
+        if i < len(letters):
+            user_vector.append(1 if letters[i].upper() == correct_letters[i].upper() else 0)
+        else:
+            user_vector.append(0)
     for i in range(5):
         if i < len(written):
             user_vector.append(1 if written[i].upper() == correct_written[i].upper() else 0)
@@ -85,11 +88,12 @@ def check_exam(message):
     correct_letters = answer_keys[exam_id]["letters"]
     correct_written = answer_keys[exam_id]["written"]
 
-    # Faqat to'g'ri javoblar
     correct_list = []
+
     for i in range(35):
         if i < len(letters_part) and letters_part[i].upper() == correct_letters[i].upper():
             correct_list.append(str(i+1))
+
     for i in range(len(correct_written)):
         if i < len(written_answers) and written_answers[i].upper() == correct_written[i].upper():
             correct_list.append(str(35+i+1))
@@ -97,7 +101,6 @@ def check_exam(message):
     result_text = "To‘g‘ri javoblar: " + ", ".join(correct_list)
     bot.reply_to(message, result_text)
 
-    # Rasch uchun saqlash
     save_raw_result(message.from_user.id, letters_part, written_answers)
 
 # =========================
@@ -122,4 +125,3 @@ def calculate_rasch(message):
 # =========================
 # Botni ishga tushirish
 bot.polling()
-    
