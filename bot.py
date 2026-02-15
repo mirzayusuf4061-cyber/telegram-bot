@@ -1,6 +1,6 @@
 from telegram.ext import ApplicationBuilder, CommandHandler
 
-TOKEN = "8173974361:AAGEDZRUGhh_wBphS3Nq_F-ushRA7xj8d10"
+TOKEN = "8173974361:AAER7WriV47EKKl5JjKaHRBflLdTR18Cv20"
 
 async def start(update, context):
     await update.message.reply_text("Bot ishlayapti ✅")
