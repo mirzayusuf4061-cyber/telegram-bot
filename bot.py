@@ -1,6 +1,4 @@
-import math
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import Updater, CommandHandler
 
 TOKEN = "8173974361:AAGEDZRUGhh_wBphS3Nq_F-ushRA7xj8d10"
 
@@ -23,34 +21,38 @@ def calculate_ability(answers):
 def convert_to_90_scale(theta):
     return round((theta + 3) / 6 * 90, 2)
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
+def start(update, context):
+    update.message.reply_text(
         "Rasch Model Bot\n\n"
         "40 ta javob yuboring:\n"
         "/check 1,0,1,1,0,..."
     )
 
-async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def check(update, context):
     try:
-        answers = list(map(int, context.args[0].split(',')))
+        text = context.args[0]
+        answers = list(map(int, text.split(',')))
 
         if len(answers) != 40:
-            await update.message.reply_text("40 ta javob bo‘lishi kerak.")
+            update.message.reply_text("40 ta javob bo‘lishi kerak.")
             return
 
         theta = calculate_ability(answers)
         final_score = convert_to_90_scale(theta)
 
-        await update.message.reply_text(
+        update.message.reply_text(
             f"Qobiliyat (theta): {round(theta,2)}\n"
             f"90 ballik tizim: {final_score}"
         )
 
     except:
-        await update.message.reply_text("Format xato.")
+        update.message.reply_text("Format xato.")
 
-app = ApplicationBuilder().token(TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("check", check))
+updater = Updater(TOKEN, use_context=True)
+dp = updater.dispatcher
 
-app.run_polling()
+dp.add_handler(CommandHandler("start", start))
+dp.add_handler(CommandHandler("check", check))
+
+updater.start_polling()
+updater.idle()
